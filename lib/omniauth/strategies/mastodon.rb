@@ -60,12 +60,7 @@ module OmniAuth
       private
 
       def get_identifier
-        I18n.with_locale(locale) do
-          form = OmniAuth::Form.new(title: translate('.omniauth.mastodon.title'))
-          form.text_field translate('.omniauth.mastodon.text'), 'identifier'
-          form.button translate('.omniauth.mastodon.button')
-          form.to_response
-        end
+        redirect '/auth/mastodon/account'
       end
 
       def translate(t)
@@ -84,10 +79,10 @@ module OmniAuth
       end
 
       def identifier
-        i = options.identifier || request.params['identifier'] || (env['omniauth.params'].is_a?(Hash) ? env['omniauth.params']['identifier'] : nil) || session[:identifier]
+        i = options.identifier || request.params['identifier'] || (env['omniauth.params'].is_a?(Hash) ? env['omniauth.params']['identifier'] : nil) || session[:mastodon_identifier]
         i = i.downcase.strip unless i.nil?
         i = nil if i == ''
-        session[:identifier] = i unless i.nil?
+        session[:mastodon_identifier] = i unless i.nil?
         i
       end
 
