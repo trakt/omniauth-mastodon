@@ -24,7 +24,10 @@ module OmniAuth
           name: raw_info['username'],
           nickname: raw_info['username'],
           image: raw_info['avatar'],
-          urls: { 'profile' => raw_info['url'] }
+          urls: {
+            'profile' => raw_info['url'],
+            'domain' => options['client_options']['site'],
+          }
         }
       end
 
