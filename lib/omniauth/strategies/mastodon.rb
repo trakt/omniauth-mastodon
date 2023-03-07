@@ -78,7 +78,7 @@ module OmniAuth
 
       def start_oauth
         set_options_from_identifier
-        redirect client.auth_code.authorize_url({:redirect_uri => callback_url}.merge(authorize_params))
+        redirect client.id.nil? ? '/auth/mastodon/account' : client.auth_code.authorize_url({:redirect_uri => callback_url}.merge(authorize_params))
       end
 
       def identifier
@@ -90,13 +90,12 @@ module OmniAuth
       end
 
       def set_options_from_identifier
-        username, domain         = identifier.split('@')
+        domain = identifier
         client_id, client_secret = options.credentials.call(domain, callback_url)
-
-        options.identifier            = identifier
+        options.identifier = identifier
         options.client_options[:site] = "https://#{domain}"
-        options.client_id             = client_id
-        options.client_secret         = client_secret
+        options.client_id = client_id
+        options.client_secret = client_secret
       end
     end
   end
